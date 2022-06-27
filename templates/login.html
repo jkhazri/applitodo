@@ -17,12 +17,12 @@
 
                 {% with message = get_flashed_messages() %}
                     {% if message %}
-                    <div style="background-color: rgb(66, 198, 64);" class="alert">
-                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                        {% for msg in message %}
-                            {{msg}}
-                        {% endfor %}
-                    </div>
+                        <div style="background-color: rgb(66, 198, 64);" class="alert">
+                            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                            {% for msg in message %}
+                                {{msg}}
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 {% endwith %}
 
@@ -36,10 +36,11 @@
                 <!-- E -->
 
                 <!-- s --> 
-                {% if success %}
+                {% if get_flashed_messages() %}
                 <div style="background-color: rgb(66, 198, 64);"  class="alert">
                     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                    {{success_message}}
+                    {{get_flashed_messages() | join("") }}
+                    a
                 </div>
                 {% endif %}
                 <!-- s -->
