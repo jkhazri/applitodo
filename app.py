@@ -1,5 +1,5 @@
 import pymysql
-from datetime import datetime
+from flask_migrate import Migrate
 
 from flask import Flask, jsonify ,render_template ,redirect 
 from flask import flash,session ,request ,url_for
@@ -11,38 +11,28 @@ from sqlalchemy.exc import IntegrityError
 
 
 # ---------- Owen Lib ------------- # 
+# Form twf
 from subpython.form import LoginForm , RegisterForm
+# config
 from subpython.config import Development
+# validate lib
 import subpython.validate as validate
+# login required
 from subpython.validate import login_required
 
-app = Flask(__name__)
 
-# app config 
+app = Flask(__name__)
 app.config.from_object(Development)
+
 # data base config
 db = SQLAlchemy(app)
+Migrate = Migrate(app, db)
 
 # session config
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_PERMANENT"] = False
 Session(app)
-
-def remember_me(status):
-    if status == True:
-        app.config["SESSION_PERMANENT"] = True
-    else:
-        app.config["SESSION_PERMANENT"] = False
-
-
-
-# data base Model
-class User(db.Model):
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64) ,nullable=False ,unique=True)
-    password = db.Column(db.String(256) ,nullable=False)
-    date = db.Column(db.DateTime ,default=datetime.now())
-
+ 
 
 
 # Error Handler for 404 or 500
@@ -96,31 +86,7 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         password_re = request.form.get("password_re")
-        
-        # safety check
-        if not validate.validate_field(username):
-            return render_template("register.html", form=form,error=True,error_message="Username is Wring :(")
-        if not validate.validate_passwords(password,password_re):
-            return render_template("register.html", form=form,error=True,error_message="Passwords is Wrong :(")
 
-        # see user duplicate in data base
-        
-        try:
-            res = User.query.filter(User.username == username)
-            if not res:
-                return render_template("register.html", form=form,error=True,error_message="User Already take by Another User :(")
-            # add user to data base
-            new_user = User(username=username,password=password)
-            db.session.add(new_user)
-            db.session.commit()
-        except IntegrityError:
-            db.session.flush()
-            db.session.rollback()
-            return render_template("register.html",form=form ,error=True ,error_message="User Already take by Another User :(")
-
-
-        flash("Register is complete :)")
-        return redirect("login")
 
 
 
