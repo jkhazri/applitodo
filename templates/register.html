@@ -17,13 +17,6 @@
         <div class="main">
             
             <div class="left">
-                
-                {% if get_flashed_messages()  %}
-                    <div style="background-color: rgb(66, 198, 64);" class="alert">
-                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                        {{get_flashed_messages() }}
-                    </div>
-                {% endif %}
 
                 <!-- E --> 
                 {% if error %}

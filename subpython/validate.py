@@ -25,9 +25,9 @@ def validate_field(string):
 
 def validate_passwords(password1,password2):
     """validate multi input"""
-    if not validate_field(password1):
+    if validate_field(password1) == False:
         return False
-    if not validate_field(password2):
+    if validate_field(password2) == False:
         return False
     if password1 != password2:
         return False

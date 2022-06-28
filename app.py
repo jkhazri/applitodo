@@ -53,18 +53,19 @@ class Task(db.Model):
 # Error Handler for 404 or 500
 @app.errorhandler(404)
 def page_not_found(e):
-    return "404",404
+    return render_template("404.html"), 404
 
 @app.errorhandler(500)
 def page_not_found(e):
     return "500",500
 
 
-@login_required
 @app.route("/")
+@login_required
 def index():
-    return render_template("index.html")
-
+    if session.get("user_id"):
+        return render_template("index.html")
+    return redirect("login")
 
 
 @app.route("/login",methods=["POST","GET"])
@@ -102,7 +103,8 @@ def login():
         pass_db = user.password
         if not check_password_hash(pass_db,password):
             return render_template("login.html", form=form,error=True,error_message="Password is Wrong :(")
-
+        
+        session["user_id"] = user.id
         flash(f"Welcome dear {user.username} ")
         return redirect("/")
 
@@ -110,37 +112,41 @@ def login():
 
 @app.route("/register",methods=["POST","GET"])
 def register():
-    form = RegisterForm()
     
     # GET
     if request.method == "GET":
+            form = RegisterForm()
             return render_template("register.html",form=form,error=False)
 
     # POST
     if request.method == "POST":
-        if form.validate_on_submit():
-            username = request.form.get("username")
-            password = request.form.get("password")
-            password_re = request.form.get("password_re")
+        form = RegisterForm()
+        username = request.form.get("username")
+        password = request.form.get("password")
+        password_re = request.form.get("password_re")
 
-            # safety check            
-            if not validate.validate_field(username):
-                return render_template("register.html",form=form,error=True,error_message="Username is Wring")
-            if not validate.validate_passwords(password,password_re):
-                return render_template("register.html",form=form,error=True,error_message="Passwords Not Match")
+        # safety check            
+        if not username:
+            return render_template("register.html",error=True,error_message="Username is Invalid")
+        if not password or not password_re or password != password_re:
+            return render_template("register.html",error=True,error_message="Passwords Not Match")
 
-
-            # check user is not duplicated
-            user_check = User.query.filter_by(username=username).first()
-            if user_check:
-                return render_template("register.html",form=form,error=True,error_message="Username Already Take by Another User")
-
+        # check user is not duplicated
+        user_check = User.query.filter_by(username=username).first()
+        if user_check:
+            return render_template("register.html",form=form,error=True,error_message="Username Already Take by Another User")
 
 
-            # add it ro to data base
-            new_user = User(username=username,password=generate_password_hash(password))
-            db.session.add(new_user)
-            db.session.commit()
-            flash(f"Register complete {username} :) ")
-            return redirect(url_for('login'))
 
+        # add it ro to data base
+        new_user = User(username=username,password=generate_password_hash(password))
+        db.session.add(new_user)
+        db.session.commit()
+        flash(f"Register complete {username} :) ")
+        return redirect(url_for('login'))
+
+
+@app.route("/loguot")
+def logout():
+    session.clear()
+    return redirect("/")
