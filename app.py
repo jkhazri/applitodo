@@ -146,7 +146,7 @@ def register():
         return redirect(url_for('login'))
 
 
-@app.route("/loguot")
+@app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
