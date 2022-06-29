@@ -9,24 +9,26 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo,email_valida
 
 # Login Form
 class LoginForm(FlaskForm):
-    username = StringField("Username" ,validators=[DataRequired(),
-                                        Length(min=6,max=64) ])
-    password = PasswordField("Password" ,validators=[DataRequired(),
-                                        Length(min=6,max=256)])
+    username = StringField("Username"
+     ,validators=[DataRequired(), Length(min=6,max=64) ])
+    
+    password = PasswordField("Password" 
+    ,validators=[DataRequired(), Length(min=6,max=256)])
 
     # remember = BooleanField("Remember ME")
     submit = SubmitField("Login")
 
 
-# REgister Form
+# Register Form
 class RegisterForm(FlaskForm):
-    username = StringField("Username" ,validators=[DataRequired(),
-    Length(min=6,max=64)])
+    username = StringField("Username" ,
+    validators=[DataRequired(), Length(min=6,max=64)])
 
-    password = PasswordField("Password" ,validators=[DataRequired()
-     ,Length(min=6,max=256)])
+    password = PasswordField("Password" ,
+    validators=[DataRequired(),Length(min=6,max=256)])
 
-    password_re = PasswordField("Confirmation Password" ,validators=[DataRequired()
-     ,Length(min=6,max=256) ,EqualTo('password', message="Passwords Must Be match")])
+    password_re = PasswordField("Confirmation Password" ,
+    validators=[DataRequired(),Length(min=6,max=256) ,
+    EqualTo(password, message="Passwords Must Be match")])
     
     submit = SubmitField("Register")

@@ -66,10 +66,8 @@
 
           <form class="form" method="post" action="/login">
             {{form.hidden_tag()}} {{form.username.label()}}
-            {{form.username(placeholder="Username Must be alphabetical and
-            Numbers")}} {{form.password.label()}}
-            {{form.password(placeholder="Password Must between 6-64 character
-            ")}}
+            {{form.username(placeholder="Username Must be alphabetical and Numbers")}} {{form.password.label()}}
+            {{form.password(placeholder="Password Must between 6-64 character")}}
             <div class="options">
               <label for="checkbox">
                 <input type="checkbox" name="checkbox" id="checkbox" />
