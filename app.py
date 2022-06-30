@@ -12,13 +12,13 @@ from flask_sqlalchemy import SQLAlchemy
 # ---------- Owen Lib ------------- # 
 from subpython.validate import login_required
 from subpython.form import LoginForm , RegisterForm
-from subpython.config import Development
+from subpython.config import Development,Production
 import subpython.validate as validate
 
 
 
 app = Flask(__name__)
-app.config.from_object(Development)
+app.config.from_object(Production)
 
 # data base config
 db = SQLAlchemy(app)
@@ -51,13 +51,16 @@ class Task(db.Model):
 
 
 # Error Handler for 404 or 500
+@app.errorhandler(500)
+def page_not_found(e):
+    return "500",500
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
 
-@app.errorhandler(500)
-def page_not_found(e):
-    return "500",500
+
 
 
 @app.route("/")
@@ -143,7 +146,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         flash(f"Register complete {username} :) ")
-        return redirect(url_for('login'))
+        return redirect('login')
 
 
 @app.route("/logout")
