@@ -63,3 +63,11 @@ td,th{
     font-weight: 500;
 }
 
+#Btn_Add-New-Task{
+    background-color: var(--color) !important;
+    text-decoration: None;
+}
+
+#Btn_Add-New-Task:hover{
+background-color: var(--header-background-lighter) !important;
+}

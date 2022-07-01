@@ -9,7 +9,6 @@
   
   /* The close button */
   .closebtn {
-      cursor: pointer;
     margin-left: 25px;
     color: white;
     font-weight: bold;
@@ -17,6 +16,7 @@
     font-size: 22px;
     line-height: 20px;
     transition: 0.3s;
+    cursor: pointer;
   }
   
   /* When moving the mouse over the close button */

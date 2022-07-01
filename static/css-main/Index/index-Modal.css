@@ -113,3 +113,51 @@ align-items: center;
 
 #Modal-Delete{display: none;}
 /* Delete Modal Section ENd */
+
+
+
+/* add new task Modal start */
+#Modal_Add_Task{display:none;} 
+#Modal_Add_Task{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom:0 ;
+    right: 0;
+}
+
+.Modal_Content{
+    background-color: white;
+    position: fixed;
+    top: 20%;
+    left: 20%;
+    right: 20%;
+    bottom: 20%;
+    padding: 10px;
+}
+
+#Close_Btn_Add {
+    cursor: pointer;
+}
+
+.content-Add form{
+    display: flex;
+    flex-direction: column;
+}
+
+#ADD_BTN:hover{
+    background-color: var(--header-background-lighter);
+}
+#ADD_BTN ,#Task_Name{
+    background-color: var(--header-background);
+    height: 40px;
+}
+
+#ADD_BTN {
+    font-size: 1.5rem;
+    color: white;
+}
+.content-Add input,textarea{
+    border: 1px solid var(--odd_child_color);
+}
+/* add new task Modal ENd */
