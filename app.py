@@ -1,8 +1,11 @@
 from datetime import datetime
+import json
+from msilib.schema import Error
 
 from flask import Flask, jsonify ,render_template ,redirect 
 from flask import flash,session ,request ,url_for
 from flask_session import Session
+from sqlalchemy import false
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError 
@@ -52,7 +55,7 @@ class Task(db.Model):
 
 # Error Handler for 404 or 500
 @app.errorhandler(500)
-def page_not_found(e):
+def error_500_server(e):
     return "500",500
 
 
@@ -74,42 +77,43 @@ def index():
 @app.route("/login",methods=["POST","GET"])
 def login():
 
-    # clear all session and cookie
-    session.clear()
-    
-    form = LoginForm()
-    # GET
     if request.method == "GET":
-        return render_template("login.html", form=form,error=False)
+        session.clear()
+        form_login = LoginForm()
+        return render_template("login.html", form=form_login,error=False)
 
     # POST
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        checkbox = request.form.get("checkbox")
-
-        # safety check
-        if not validate.validate_field(username):
-            return render_template("login.html", form=form,error=True,error_message="Username is invalid :(")
-        if not validate.validate_field(password):
-            return render_template("login.html", form=form,error=True,error_message="Password is invalid :(")
+        form_login = LoginForm(request.form)
+        if form_login.validate():
+            username = request.form.get("username")
+            password = request.form.get("password")
+            checkbox = request.form.get("checkbox")
             
+            # safety check
+            if not validate.validate_field(username):
+                return render_template("login.html", form = form_login ,error=True,error_message="Username is invalid :(")
+            if not validate.validate_field(password):
+                return render_template("login.html", form = form_login ,error=True,error_message="Password is invalid :(")
+                
 
-        # check username and password
-        user = User.query.filter_by(username=username).first()
-        if not user:
-            return render_template("login.html", form=form,error=True,error_message="information Wrong :(")
-        
-        if user.username != username:
-            return render_template("login.html", form=form,error=True,error_message="username is Wrong :(")
+            # check username and password
+            user = User.query.filter_by(username=username).first()
+            if not user:
+                return render_template("login.html", form=form_login,error=True,error_message="information Wrong :(")
+            
+            if user.username != username:
+                return render_template("login.html", form=form_login,error=True,error_message="username is Wrong :(")
 
-        pass_db = user.password
-        if not check_password_hash(pass_db,password):
-            return render_template("login.html", form=form,error=True,error_message="Password is Wrong :(")
-        
-        session["user_id"] = user.id
-        flash(f"Welcome dear {user.username} ")
-        return redirect("/")
+            pass_db = user.password
+            if not check_password_hash(pass_db,password):
+                return render_template("login.html", form=form_login,error=True,error_message="Password is Wrong :(")
+            
+            session["user_id"] = user.id
+            flash(f"Welcome dear {user.username} ")
+            return redirect("/")
+        else:
+             return render_template("login.html", form=form_login,error=True, error_message="Invalid Inputs")
 
 
 
@@ -123,31 +127,34 @@ def register():
 
     # POST
     if request.method == "POST":
-        form = RegisterForm()
-        username = request.form.get("username")
-        password = request.form.get("password")
-        password_re = request.form.get("password_re")
+        form = RegisterForm(request.form)
+        print(form.validate())
+        if form.validate():
+            username = request.form.get("username")
+            password = request.form.get("password")
+            password_re = request.form.get("password_re")
 
-        # safety check            
-        if not username:
-            return render_template("register.html",error=True,error_message="Username is Invalid")
-        if not password or not password_re or password != password_re:
-            return render_template("register.html",error=True,error_message="Passwords Not Match")
+            # safety check            
+            if not username:
+                return render_template("register.html",error=True,error_message="Username is Invalid")
+            if not password or not password_re or password != password_re:
+                return render_template("register.html",error=True,error_message="Passwords Not Match")
 
-        # check user is not duplicated
-        user_check = User.query.filter_by(username=username).first()
-        if user_check:
-            return render_template("register.html",form=form,error=True,error_message="Username Already Take by Another User")
+            # check user is not duplicated
+            user_check = User.query.filter_by(username=username).first()
+            if user_check:
+                return render_template("register.html",form=form,error=True,error_message="Username Already Take by Another User")
 
 
 
-        # add it ro to data base
-        new_user = User(username=username,password=generate_password_hash(password))
-        db.session.add(new_user)
-        db.session.commit()
-        flash(f"Register complete {username} :) ")
-        return redirect('login')
-
+            # add it ro to data base
+            new_user = User(username=username,password=generate_password_hash(password))
+            db.session.add(new_user)
+            db.session.commit()
+            flash(f"Register complete {username} :) ")
+            return redirect('login')
+        else:
+            return render_template("register.html",form=form,error=True,error_message="Invalid Inputs :(")
 
 @app.route("/logout")
 def logout():

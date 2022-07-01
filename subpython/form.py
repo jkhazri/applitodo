@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField  
-from wtforms.validators import DataRequired, Length, Email, EqualTo,email_validator
-
+from wtforms import StringField, SubmitField, PasswordField 
+from wtforms.validators import InputRequired, Length
 
 # user name 6- 64
 # password - 10 - 64256
@@ -9,25 +8,15 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo,email_valida
 
 # Login Form
 class LoginForm(FlaskForm):
-    username = StringField("Username"
-     ,validators=[DataRequired(), Length(min=6,max=64) ])
-    
-    password = PasswordField("Password" 
-    ,validators=[DataRequired(), Length(min=6,max=256)])
-
+    username = StringField(validators=[InputRequired(), Length(min=6,max=64) ])
+    password = PasswordField(validators=[InputRequired(), Length(min=6,max=64)])
     submit = SubmitField("Login")
 
 
 # Register Form
 class RegisterForm(FlaskForm):
-    username = StringField("Username" ,
-    validators=[DataRequired(), Length(min=6,max=64)])
-
-    password = PasswordField("Password" ,
-    validators=[DataRequired(),Length(min=6,max=256)])
-
-    password_re = PasswordField("Confirmation Password" ,
-    validators=[DataRequired(),Length(min=6,max=256) ,
-    EqualTo(password, message="Passwords Must Be match")])
+    username = StringField(validators=[InputRequired(), Length(min=6,max=64)])
+    password = PasswordField(validators=[InputRequired(),Length(min=6,max=256)])
+    password_re = PasswordField(validators=[InputRequired(),Length(min=6,max=256)])
     
     submit = SubmitField("Register")
