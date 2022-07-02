@@ -87,26 +87,20 @@
 
 
             <div class="container-fluid bg-costom p-5">
-                <div class="container-form">
+                <div class="container-form mt-5">
                     <form class="form_edit" action="/action_target" method="post">
-                      <input type="hidden" name="action" value="edit">  
-                      <label for="Edit_Task_Name">
-                            <h1>
-                                Task Name
-                            </h1>
-                        </label>
-                        <input autofocus required type="text" name="Edit_Task_Name" id="Edit_Task_Name" placeholder="Task Name" />
-                        <label for="Edit_Task_Info">
-                            <h3>
-                                Task Info
-                            </h3>
-                        </label>
-                        <textarea required name="Edit_Task_Info" id="Edit_Task_Info" cols="30" rows="10" placeholder="Edit Your Info Task">
-                        </textarea>
+                      <input type="hidden" name="action" value="delete">  
+                        <h2 class="mx-auto" >Are Sure wanna Delete This Task?</h2>
                         <input type="hidden" name="task" value="{{post_id}}">
-                        <input type="submit" value="Edit" />
+                        <div class="d-flex justify-content-center align-items-center">
 
-                    </form>
+                          <input class="p-0 p-5" type="submit" value="Yes" />
+                          <a href="/">
+                            <input class="w-100 p-5" type="submit" value="No" />
+                          </a>
+                          
+                        </div>
+                      </form>
                 </div>
             </div>
 

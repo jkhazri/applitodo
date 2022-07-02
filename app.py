@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Flask, jsonify ,render_template ,redirect 
 from flask import flash,session ,request ,url_for
 from flask_session import Session
+import sqlalchemy
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError 
@@ -179,10 +180,20 @@ def register():
         else:
             return render_template("register.html",form=form,error=True,error_message="Invalid Inputs :(")
 
+
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
+
+@app.route("/edit",methods=["POST","GET"])
+def edit():
+    return render_template("edit.html",post_id=request.form.get("task"))
+
+
+@app.route("/delete")
+def delete():
+    return render_template("delete.html",post_id=request.form.get('task'))
 
 
 @app.route("/add_new_task",methods=['POST'])
@@ -216,12 +227,26 @@ def action_target():
     if action.lower() == "edit":
         title = request.form.get("Edit_Task_Name")
         info = request.form.get("Edit_Task_Info")
+        task_id = request.form.get("task")
 
         if not validate.validate_tasks(title):
             return redirect('/')
         if not validate.validate_tasks(info):
             return redirect('/')
-    
+        
+        try:
+            new_task = Task.query.filter_by(id=task_id).first()
+            if not new_task:
+                return redirect("/")
+
+            new_task.task_title=title
+            new_task.task_info=info
+            db.session.commit()
+        except:
+            return error_500_server
+        
+        return redirect("/")
+
     # delete section
     elif action.lower() == "delete":
         pass
@@ -230,13 +255,6 @@ def action_target():
         return redirect("/")
     
 
-@app.route("/edit")
-def edit():
-    return render_template("edit.html")
-
-@app.route("/delete")
-def delete():
-    return render_template("delete.html")
 
 
 @app.route("/middle_center", methods=["POST"])

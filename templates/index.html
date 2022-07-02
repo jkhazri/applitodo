@@ -99,7 +99,7 @@
             <th class="header-cell  left-top">#</th>
             <th class="header-cell">Task Name</th>
             <th class="header-cell">Info</th>
-            <th class="header-cell right-top ">Status</th>
+            <th class="header-cell right-top text-center">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -110,12 +110,10 @@
             {% set line_counter = loop.index %} 
             <tr class="odd">
               <td>
-                <p class="d-none">{{each.id}}</p>
                 <i class="fa-solid fa-circle-check"></i>
-                
                 {{line_counter}} 
-                
               </td>
+
               <td class="title">
                 {{each.task_title}}
               </td>
@@ -123,16 +121,16 @@
                 {{each.task_info}}
               </td>
               <td class="last">
-                <form action="/middle_center" method="post">
-                  <input type="hidden" name="action" value="edit">
+                <form action="/edit" method="post">
+                  <input type="hidden" name="task" value="{{each.id}}">
                   <button class="btn-opr" class="edit" type="submit">
                     <i class="fa-solid fa-file-pen"></i>
                     Edit
                   </button>
                 </form>
                 
-                <form action="/middle_center" method="post">
-                  <input type="hidden" name="action" value="delete">
+                <form action="/delete" method="post">
+                  <input type="hidden" name="task" value="{{each.id}}">
                   <button class="btn-opr" class="delete" type="submit" >
                     <i class="fa-solid fa-trash"></i>
                     Delete
@@ -141,6 +139,7 @@
                 
                 <form action="/middle_center" method="post">
                   <input type="hidden" name="action" value="done">
+                  <input type="hidden" name="task" value="{{each.id}}">
                   <button class="btn-opr" class="done" type="submit">
                     <i class="fa-solid fa-circle-check"></i>
                     Done
