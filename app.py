@@ -208,3 +208,25 @@ def add_new_task():
 
 
 
+@app.route("/action_target", methods=["POST"])
+def action_target():
+    action = request.form.get("action")
+    
+    # edit section
+    if action.lower() == "edit":
+        title = request.form.get("Edit_Task_Name")
+        info = request.form.get("Edit_Task_Info")
+
+        if not validate.validate_tasks(title):
+            return redirect('/')
+        if not validate.validate_tasks(info):
+            return redirect('/')
+    
+    # delete section
+    elif action.lower() == "delete":
+        pass
+    
+    else:
+        return redirect("/")
+    
+

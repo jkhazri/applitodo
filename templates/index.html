@@ -11,9 +11,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WE - Team</title>
-    <link rel="stylesheet" href=" {{url_for('static', filename='css-main/index/index-helper.css')}} " />
-    <link rel="stylesheet" href=" {{url_for('static', filename='css-main/index/index.css')}} " />
-    <link rel="stylesheet" href=" {{url_for('static', filename='css-main/index/index-Modal.css')}} " />
+    <link rel="stylesheet" href=" {{ url_for('static', filename='css-main/index/index-helper.css') }} " />
+    <link rel="stylesheet" href=" {{ url_for('static', filename='css-main/index/index.css') }} " />
+    <link rel="stylesheet" href=" {{ url_for('static', filename='css-main/index/index-Modal.css') }} " />
   </head>
   <body>
     
@@ -155,7 +155,7 @@
               <span class="close" id="Close-Modal">&times;</span>
             </div>
             <div class="task-editor">
-              <form action="/action_target">
+              <form action="/action_target" method="post">
                 <input required type="text" name="Edit_Task_Name" id="Edit_Task_Name" placeholder="Task Name" />
                 <textarea
                   required
