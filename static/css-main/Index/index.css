@@ -48,10 +48,12 @@ td,th{
 }
 
 .btn-opr{
-    text-decoration: none;
     margin-left: 5px;
     color: white;
     cursor: pointer;
+    padding: 5px 8px;
+    background-color: var(--header-background);
+    border: 1px solid var(--odd_child_color);
 }
 
 .btn-opr:hover{

@@ -44,7 +44,7 @@ class Task(db.Model):
     __tablename__ = "tasks"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
-    task_title = db.Column(db.String(64) ,nullable=False ,unique=True)
+    task_title = db.Column(db.String(64) ,nullable=False ,unique=False)
     task_info = db.Column(db.String(256) ,nullable=False,unique=False)
     status = db.Column(db.Integer ,default=0)
     # 0 = on Doing || 1 = Done!
@@ -230,3 +230,20 @@ def action_target():
         return redirect("/")
     
 
+@app.route("/edit")
+def edit():
+    return render_template("edit.html")
+
+@app.route("/delete")
+def delete():
+    return render_template("delete.html")
+
+
+@app.route("/middle_center", methods=["POST"])
+def middle_center():
+    if request.form.get("action") == "edit":
+        return redirect("edit")
+    if request.form.get("action") == "delete":
+        return "delete"
+    if request.form.get("action") == "done":
+        return "done"

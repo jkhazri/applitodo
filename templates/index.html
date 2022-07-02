@@ -123,18 +123,30 @@
                 {{each.task_info}}
               </td>
               <td class="last">
-                <a class="btn-opr edit" class="edit" href="#">
-                  <i class="fa-solid fa-file-pen"></i>
-                  Edit
-                </a>
-                <a class="btn-opr delete" class="delete" href="#">
-                  <i class="fa-solid fa-trash"></i>
-                  Delete
-                </a>
-                <a class="btn-opr done" class="done" href="#">
-                  <i class="fa-solid fa-circle-check"></i>
-                  Done
-                </a>
+                <form action="/middle_center" method="post">
+                  <input type="hidden" name="action" value="edit">
+                  <button class="btn-opr" class="edit" type="submit">
+                    <i class="fa-solid fa-file-pen"></i>
+                    Edit
+                  </button>
+                </form>
+                
+                <form action="/middle_center" method="post">
+                  <input type="hidden" name="action" value="delete">
+                  <button class="btn-opr" class="delete" type="submit" >
+                    <i class="fa-solid fa-trash"></i>
+                    Delete
+                  </button>
+                </form>
+                
+                <form action="/middle_center" method="post">
+                  <input type="hidden" name="action" value="done">
+                  <button class="btn-opr" class="done" type="submit">
+                    <i class="fa-solid fa-circle-check"></i>
+                    Done
+                  </button>
+                </form>
+              
               </td>
             </tr>
               {% endfor %}
