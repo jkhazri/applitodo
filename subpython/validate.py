@@ -2,6 +2,11 @@ from functools import wraps
 from flask import request, redirect, url_for
 from flask import redirect, render_template, request, session
 
+
+first_login = [0,'Welcome to WE-Team'.title(), 'Planning, list your work and Do best'.title()]
+
+
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -13,7 +18,7 @@ def login_required(f):
 
 
 def validate_field(string):
-    """take a field ad validate it"""
+    """take a `field` and validate it"""
     if not string:
         return False
     for i in string:
@@ -30,6 +35,7 @@ def validate_passwords(password1,password2):
     if validate_field(password2) == False:
         return False
     if password1 != password2:
-        return False
+        # Not Same
+        return "NS"
 
     return True

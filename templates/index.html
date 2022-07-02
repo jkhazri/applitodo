@@ -16,16 +16,18 @@
     <link rel="stylesheet" href=" {{url_for('static', filename='css-main/index/index-Modal.css')}} " />
   </head>
   <body>
+    
     <div class="button-add-task position-fixed end-0 bottom-0 m-4">
-      <h4 class="fs-4 p-2 rounded rounded-2 text-white" id="Btn_Add-New-Task" >Add New Task</h4git >
+      <h4 class="fs-4 p-2 rounded rounded-2 text-white" id="Btn_Add-New-Task" >Add New Task</h4>
     </div>
+
     <div class="container-fluid">
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
             <div class="container-fluid">
               <a class="navbar-brand" href="#">
                 <img
-                  src="../static/img/logo.png"
+                  src="{{url_for('static', filename='img/logo.png')}}"
                   alt=""
                   width="40"
                   height="40"
@@ -77,16 +79,16 @@
           </nav>
 
 
-
-              {% with message = get_flashed_messages() %} 
+            {% with message = get_flashed_messages() %} 
                 {% if message %} 
-                        <div style="background-color: rgb(66, 198, 64)" class="alert">
-                            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                            {% for msg in message %}
-                            {{msg}}
-                            {% endfor %} 
-                        </div>
-                {% endif %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Welcome Dear
+                    {% for msg in message %}
+                     <strong>{{msg}}</strong>
+                    {% endfor %} 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                  {% endif %}
             {% endwith %}
 
 
@@ -102,39 +104,19 @@
         </thead>
         <tbody>
           <div class="body-table">
-            <div>
+            
+            {% if first_time %}
               <tr class="odd">
                 <td>
                   <i class="fa-solid fa-circle-check"></i>
-                  0
+                  {{first_time[0]}}
                 </td>
-                <td class="title">ali</td>
-                <td>Web development</td>
-                <td class="last">
-                  <a class="btn-opr edit" class="edit" href="#">
-                    <i class="fa-solid fa-file-pen"></i>
-                    Edit
-                  </a>
-                  <a class="btn-opr delete" class="delete" href="#">
-                    <i class="fa-solid fa-trash"></i>
-                    Delete
-                  </a>
-                  <a class="btn-opr done" class="done" href="#">
-                    <i class="fa-solid fa-circle-check"></i>
-                    Done
-                  </a>
+                <td class="title">
+                  {{first_time[1]}}
                 </td>
-              </tr>
-            </div>
-
-            <div>
-              <tr class="even">
                 <td>
-                  <i class="fa-solid fa-circle-check"></i>
-                  1
+                  {{first_time[2]}}
                 </td>
-                <td class="title">Mehdi</td>
-                <td>Web development</td>
                 <td class="last">
                   <a class="btn-opr edit" class="edit" href="#">
                     <i class="fa-solid fa-file-pen"></i>
@@ -150,57 +132,8 @@
                   </a>
                 </td>
               </tr>
-            </div>
+              {% endif %}
 
-            <div>
-              <tr class="odd">
-                <td>
-                  <i class="fa-solid fa-circle-check"></i>
-                  2
-                </td>
-                <td class="title">Arshia</td>
-                <td>Php Development every Morning</td>
-                <td class="last">
-                  <a class="btn-opr edit" class="edit" href="#">
-                    <i class="fa-solid fa-file-pen"></i>
-                    Edit
-                  </a>
-                  <a class="btn-opr delete" class="delete" href="#">
-                    <i class="fa-solid fa-trash"></i>
-                    Delete
-                  </a>
-                  <a class="btn-opr done" class="done" href="#">
-                    <i class="fa-solid fa-circle-check"></i>
-                    Done
-                  </a>
-                </td>
-              </tr>
-            </div>
-
-            <div>
-              <tr class="even">
-                <td>
-                  <i class="fa-solid fa-circle-check"></i>
-                  3
-                </td>
-                <td class="title">ALirad</td>
-                <td>Ui UX design from 1 to 3 am</td>
-                <td class="last">
-                  <a class="btn-opr edit" class="edit" href="#">
-                    <i class="fa-solid fa-file-pen"></i>
-                    Edit
-                  </a>
-                  <a class="btn-opr delete" class="delete" href="#">
-                    <i class="fa-solid fa-trash"></i>
-                    Delete
-                  </a>
-                  <a class="btn-opr done" class="done" href="#">
-                    <i class="fa-solid fa-circle-check"></i>
-                    Done
-                  </a>
-                </td>
-              </tr>
-            </div>
           </div>
         </tbody>
       </table>

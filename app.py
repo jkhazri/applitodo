@@ -1,11 +1,8 @@
 from datetime import datetime
-import json
-from msilib.schema import Error
 
 from flask import Flask, jsonify ,render_template ,redirect 
 from flask import flash,session ,request ,url_for
 from flask_session import Session
-from sqlalchemy import false
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError 
@@ -39,6 +36,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64) ,nullable=False ,unique=True)
     password = db.Column(db.String(256) ,nullable=False,unique=False)
+    new_user = db.Column(db.Integer, default=0)
     date = db.Column(db.DateTime ,default=datetime.now())
 
 # Tasks Model
@@ -58,19 +56,21 @@ class Task(db.Model):
 def error_500_server(e):
     return "500",500
 
-
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
-
-
 
 
 @app.route("/")
 @login_required
 def index():
     if session.get("user_id"):
-        return render_template("index.html")
+        first = request.args.get
+        print(first)
+        if first != None:
+            return render_template("index.html",first_time=first)
+        else:
+            return render_template("index.html")
     return redirect("login")
 
 
@@ -109,8 +109,18 @@ def login():
             if not check_password_hash(pass_db,password):
                 return render_template("login.html", form=form_login,error=True,error_message="Password is Wrong :(")
             
+            # add user id in db to user session
             session["user_id"] = user.id
-            flash(f"Welcome dear {user.username} ")
+
+            # check its first time user log in to web site to show welcome message
+            if user.new_user == 0:
+                user.new_user = 1
+                db.session.commit()
+
+                flash(f"{user.username}")
+                first = validate.first_login
+                return redirect(url_for('index',first_time=first))
+
             return redirect("/")
         else:
              return render_template("login.html", form=form_login,error=True, error_message="Invalid Inputs")
@@ -128,17 +138,21 @@ def register():
     # POST
     if request.method == "POST":
         form = RegisterForm(request.form)
-        print(form.validate())
         if form.validate():
             username = request.form.get("username")
             password = request.form.get("password")
             password_re = request.form.get("password_re")
 
             # safety check            
-            if not username:
-                return render_template("register.html",error=True,error_message="Username is Invalid")
-            if not password or not password_re or password != password_re:
-                return render_template("register.html",error=True,error_message="Passwords Not Match")
+            if not validate.validate_field(username):
+                return render_template("register.html",form=form,error=True,error_message="Username Is invalid :(")
+            
+            password_validation = validate.validate_passwords(password,password_re)
+            if password_validation == "NS":
+                return render_template("register.html",form=form,error=True,error_message="Passwords Are Not Match :(")
+            elif password_validation == False:
+                return render_template("register.html",form=form,error=True,error_message="Passwords are Wrong")
+
 
             # check user is not duplicated
             user_check = User.query.filter_by(username=username).first()
