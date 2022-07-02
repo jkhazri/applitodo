@@ -39,3 +39,11 @@ def validate_passwords(password1,password2):
         return "NS"
 
     return True
+
+
+
+
+def validate_tasks(task):
+    if not task:
+        return False
+    return True

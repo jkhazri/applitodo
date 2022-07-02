@@ -44,8 +44,8 @@ class Task(db.Model):
     __tablename__ = "tasks"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
-    task_title = db.Column(db.String(32) ,nullable=False ,unique=True)
-    task_info = db.Column(db.String(128) ,nullable=False,unique=False)
+    task_title = db.Column(db.String(64) ,nullable=False ,unique=True)
+    task_info = db.Column(db.String(256) ,nullable=False,unique=False)
     status = db.Column(db.Integer ,default=0)
     # 0 = on Doing || 1 = Done!
     date = db.Column(db.DateTime ,default=datetime.now())
@@ -65,13 +65,12 @@ def page_not_found(e):
 @login_required
 def index():
     if session.get("user_id"):
-        first = request.args.get
-        print(first)
-        if first != None:
-            return render_template("index.html",first_time=first)
-        else:
-            return render_template("index.html")
-    return redirect("login")
+        # get user all task from data base
+        user_db_data = Task.query.filter_by(user_id=(session['user_id'])).all()
+        print(len(user_db_data))
+        return render_template("index.html",user_db=user_db_data,user_id=session['user_id'])
+    else:
+        return redirect("login")
 
 
 @app.route("/login",methods=["POST","GET"])
@@ -119,9 +118,10 @@ def login():
 
                 flash(f"{user.username}")
                 first = validate.first_login
-                return redirect(url_for('index',first_time=first))
-
-            return redirect("/")
+                return redirect('/')
+            else:
+                return redirect("/")
+        
         else:
              return render_template("login.html", form=form_login,error=True, error_message="Invalid Inputs")
 
@@ -159,12 +159,21 @@ def register():
             if user_check:
                 return render_template("register.html",form=form,error=True,error_message="Username Already Take by Another User")
 
-
-
-            # add it ro to data base
+            # add it ro to data base 
             new_user = User(username=username,password=generate_password_hash(password))
             db.session.add(new_user)
             db.session.commit()
+
+            # query to data base
+            user_in_db = User.query.filter_by(username=username).first()
+            if not user_in_db:
+                return error_500_server()
+
+            # add first column(welcome message too user task column)
+            new_task = Task(user_id=user_in_db.id,task_title=validate.first_login[1],task_info=validate.first_login[2])
+            db.session.add(new_task)
+            db.session.commit()
+
             flash(f"Register complete {username} :) ")
             return redirect('login')
         else:
@@ -174,3 +183,28 @@ def register():
 def logout():
     session.clear()
     return redirect("/")
+
+
+@app.route("/add_new_task",methods=['POST'])
+def add_new_task():
+    title = request.form.get("Task_Info")
+    info = request.form.get("Task_Name")   
+
+    if not validate.validate_tasks(title):
+        return redirect('/')
+    if not validate.validate_tasks(info):
+        return redirect('/')
+    
+
+    # add task to user db
+    new_task = Task(user_id=session['user_id'],task_info=info,task_title=title)
+    try:
+        db.session.add(new_task)
+        db.session.commit()
+    except:
+        return error_500_server()
+    return redirect('/')
+
+
+
+

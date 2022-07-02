@@ -49,3 +49,32 @@ Close_Modal_Add.addEventListener('click',function(){
     Modal_Add_Task.style.display = "none";
 });
 // add new task ENd
+
+
+
+// alert adding task
+// Not working ned to fix  +Error+
+const Task_Name_Field = document.querySelector('#Task_Name_Field');
+const Task_Info_Field = document.querySelector('#Task_Info_Field');
+const ADD_BTN = document.querySelector('#ADD_BTN');
+const alert_add = document.querySelector('.Modal_alert');
+const Add_alert_text = document.querySelector('#Add_alert_text');
+const form_add_task = document.querySelector('#Form_add_task');
+
+
+form_add_task.addEventListener('submit',(e) => {
+    if (Task_Title_Field.innerHTML.length < 1){
+        e.preventDefault()
+        Add_alert_text.innerHTML = "Task Name Field Can Not be Empty !" ;
+        Modal_alert.style.display = 'block';
+    }
+    if (Task_Info_Field.innerHTML.length < 1){
+        e.preventDefault()
+        Add_alert_text.innerHTML = "Info Field Can Not be Empty !" ;
+        Modal_alert.style.display = 'block';
+    }
+    return true;
+
+
+});
+// alert adding task

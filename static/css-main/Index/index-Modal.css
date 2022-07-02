@@ -161,3 +161,17 @@ align-items: center;
     border: 1px solid var(--odd_child_color);
 }
 /* add new task Modal ENd */
+
+
+
+
+
+/* Modal alert */
+.Modal_alert{
+    display: none; 
+    position: fixed;
+    top: 10%;
+    left: 0;
+    right: 0;
+}
+/* Modal alert */

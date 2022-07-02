@@ -51,6 +51,11 @@ td,th{
     text-decoration: none;
     margin-left: 5px;
     color: white;
+    cursor: pointer;
+}
+
+.btn-opr:hover{
+    background-color: var(--header-background-lighter);
 }
 
 .edit,.delete,.done{
