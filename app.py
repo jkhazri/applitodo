@@ -1,16 +1,15 @@
 from datetime import datetime
 
-from flask import Flask, jsonify ,render_template ,redirect 
+from flask import Flask,render_template ,redirect 
 from flask import flash,session ,request ,url_for
 from flask_session import Session
-import sqlalchemy
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError 
 from flask_sqlalchemy import SQLAlchemy
 
 
-# ---------- Owen Lib ------------- # 
+# ------------ Owen Lib ------------- # 
 from subpython.validate import login_required
 from subpython.form import LoginForm , RegisterForm
 from subpython.config import Development,Production
@@ -24,32 +23,39 @@ app.config.from_object(Production)
 # data base config
 db = SQLAlchemy(app)
 
-
 # session config
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_PERMANENT"] = False
 Session(app)
  
 
-# USers Model
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64) ,nullable=False ,unique=True)
     password = db.Column(db.String(256) ,nullable=False,unique=False)
+    # 0 = New user || 1 = Old User
     new_user = db.Column(db.Integer, default=0)
     date = db.Column(db.DateTime ,default=datetime.now())
 
-# Tasks Model
 class Task(db.Model):
     __tablename__ = "tasks"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('users.id'))
     task_title = db.Column(db.String(64) ,nullable=False ,unique=False)
     task_info = db.Column(db.String(256) ,nullable=False,unique=False)
-    status = db.Column(db.Integer ,default=0)
-    # 0 = on Doing || 1 = Done!
+    # 0 = on Doing || 1 = Done! 
+    status = db.Column(db.Integer ,default = 0)
     date = db.Column(db.DateTime ,default=datetime.now())
+
+# class History(db.Model):
+#     __tablename__ = "history"
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     task_title = db.Column(db.String(64) ,nullable=False ,unique=False)
+#     task_info = db.Column(db.String(256) ,nullable=False,unique=False)
+#     # 0 = on Doing || 1 = Done! || 3 = Delete
+#     status = db.Column(db.Integer ,default=0)
 
 
 # Error Handler for 404 or 500
@@ -254,20 +260,18 @@ def action_target():
 
     # delete section
     elif action.lower() == "delete":
-        
-        # if user click on yes to delete task
         if request.form.get('delete') == "Yes":
-        # otherwise Click No
             try:
                 new_task = Task.query.get(request.form.get('task'))
                 db.session.delete(new_task)
                 db.session.commit()
+                flash("Task Deleted successfully")
                 return redirect("/")
             except:
                 return redirect("/")
-
         else:
             return redirect("/")
+    
     
     else:
         return redirect("/")
@@ -280,7 +284,10 @@ def action_target():
 def middle_center():
     if request.form.get("action") == "edit":
         return redirect("edit")
-    if request.form.get("action") == "delete":
-        return "delete"
-    if request.form.get("action") == "done":
-        return "done"
+
+
+
+@app.route("/history")
+@login_required
+def history():
+    return render_template("history.html")
