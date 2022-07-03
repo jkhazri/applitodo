@@ -68,7 +68,6 @@ def index():
     if session.get("user_id"):
         # get user all task from data base
         user_db_data = Task.query.filter_by(user_id=(session['user_id'])).all()
-        print(len(user_db_data))
         return render_template("index.html",user_db=user_db_data,user_id=session['user_id'])
     else:
         return redirect("login")
