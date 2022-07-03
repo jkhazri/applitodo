@@ -1,3 +1,3 @@
 # Todo-Web-app
-A todo web app || 60% Done
+A todo web app || 80% Done
 
