@@ -211,7 +211,7 @@ def add_new_task():
     
 
     # add task to user db
-    new_task = Task(user_id=session['user_id'],task_info=info,task_title=title)
+    new_task = Task(user_id=session['user_id'],task_info=info.title(),task_title=title.title())
     try:
         db.session.add(new_task)
         db.session.commit()
@@ -243,8 +243,8 @@ def action_target():
             if not new_task:
                 return redirect("/")
 
-            new_task.task_title=title
-            new_task.task_info=info
+            new_task.task_title=title.title()
+            new_task.task_info=info.title()
             db.session.commit()
         except:
             return error_500_server
