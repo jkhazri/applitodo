@@ -122,7 +122,7 @@ def login():
                 user.new_user = 1
                 db.session.commit()
 
-                flash(f"{user.username}")
+                flash(f" Welcome Dear {user.username}")
                 first = validate.first_login
                 return redirect('/')
             else:
@@ -195,7 +195,34 @@ def logout():
 @app.route("/edit",methods=["POST","GET"])
 @login_required
 def edit():
-    return render_template("edit.html",post_id=request.form.get("task"))
+    if request.method == "GET":
+        return render_template("edit.html",post_id=request.args.get("post_id"))
+    if request.method == "POST":
+        # edit section
+        title = request.form.get("Edit_Task_Name")
+        info = request.form.get("Edit_Task_Info")
+        task_id = request.form.get("post_id")
+
+        if not validate.validate_tasks(title):
+            return redirect('/')
+        if not validate.validate_tasks(info):
+            return redirect('/')
+        if not validate.validate_tasks(task_id):
+            return redirect('/')
+        
+        try:
+            new_task = Task.query.filter_by(id=task_id).first()
+            if not new_task:
+                return redirect("/")
+
+            new_task.task_title=title.title()
+            new_task.task_info=info.title()
+            db.session.commit()
+            flash("Task Edited Successfully")
+            return redirect("/")
+        except:
+            return error_500_server
+        
 
 
 @app.route("/delete",methods=["POST","GET"])
@@ -221,9 +248,10 @@ def add_new_task():
     try:
         db.session.add(new_task)
         db.session.commit()
+        flash("Task Added SuccessFully")
+        return redirect('/')
     except:
         return error_500_server()
-    return redirect('/')
 
 
 
@@ -232,34 +260,8 @@ def add_new_task():
 @login_required
 def action_target():
     action = request.form.get("action")
-    
-    # edit section
-    if action.lower() == "edit":
-        title = request.form.get("Edit_Task_Name")
-        info = request.form.get("Edit_Task_Info")
-        task_id = request.form.get("task")
-
-        if not validate.validate_tasks(title):
-            return redirect('/')
-        if not validate.validate_tasks(info):
-            return redirect('/')
-        
-        try:
-            new_task = Task.query.filter_by(id=task_id).first()
-            if not new_task:
-                return redirect("/")
-
-            new_task.task_title=title.title()
-            new_task.task_info=info.title()
-            db.session.commit()
-        except:
-            return error_500_server
-        
-        return redirect("/")
-
-
     # delete section
-    elif action.lower() == "delete":
+    if action.lower() == "delete":
         if request.form.get('delete') == "Yes":
             try:
                 new_task = Task.query.get(request.form.get('task'))
@@ -272,7 +274,7 @@ def action_target():
         else:
             return redirect("/")
     
-    
+
     else:
         return redirect("/")
     

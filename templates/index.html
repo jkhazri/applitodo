@@ -104,7 +104,7 @@
 
       {% with message = get_flashed_messages() %} {% if message %}
       <div class="alert alert-success alert-dismissible fade show" role="alert">
-        Welcome Dear {% for msg in message %}
+       {% for msg in message %}
         <strong>{{msg}}</strong>
         {% endfor %}
         <button
@@ -138,8 +138,8 @@
               <td class="title">{{each.task_title}}</td>
               <td>{{each.task_info}}</td>
               <td class="last">
-                <form action="/edit" method="post">
-                  <input type="hidden" name="task" value="{{each.id}}" />
+                <form action="/edit" method="get">
+                  <input type="hidden" name="post_id" value="{{each.id}}" />
                   <button class="btn-opr" class="edit" type="submit">
                     <i class="fa-solid fa-file-pen"></i>
                     Edit

@@ -17,16 +17,19 @@
             <div class="left">
                 <div class="left-form">
 
-                 {% with message = get_flashed_messages() %} 
-                    {% if message %} 
-                            <div style="background-color: rgb(66, 198, 64)" class="alert">
-                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                                {% for msg in message %}
-                                {{msg}}
-                                {% endfor %} 
-                            </div>
-                    {% endif %}
-                {% endwith %}
+                    {% with message = get_flashed_messages() %} {% if message %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                     {% for msg in message %}
+                      <strong>{{msg}}</strong>
+                      {% endfor %}
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    {% endif %} {% endwith %}
 
                 {% if error %}
                 <div style="background-color: red" class="alert">

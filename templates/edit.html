@@ -88,8 +88,7 @@
 
             <div class="container-fluid bg-costom p-5">
                 <div class="container-form">
-                    <form class="form_edit" action="/action_target" method="post">
-                      <input type="hidden" name="action" value="edit">  
+                    <form class="form_edit" action="/edit" method="post">
                       <label for="Edit_Task_Name">
                             <h1>
                                 Task Name
@@ -103,7 +102,7 @@
                         </label>
                         <textarea required name="Edit_Task_Info" id="Edit_Task_Info" cols="30" rows="10" placeholder="Edit Your Info Task">
                         </textarea>
-                        <input type="hidden" name="task" value="{{post_id}}">
+                        <input type="hidden" name="post_id" value="{{post_id}}">
                         <input type="submit" value="Edit" />
 
                     </form>
