@@ -55,7 +55,7 @@ class Task(db.Model):
 # Error Handler for 404 or 500
 @app.errorhandler(500)
 def error_500_server(e):
-    return "500",500
+    return render_template('500.html'),500
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -182,21 +182,25 @@ def register():
 
 
 @app.route("/logout")
+@login_required
 def logout():
     session.clear()
     return redirect("/")
 
 @app.route("/edit",methods=["POST","GET"])
+@login_required
 def edit():
     return render_template("edit.html",post_id=request.form.get("task"))
 
 
-@app.route("/delete")
+@app.route("/delete",methods=["POST","GET"])
+@login_required
 def delete():
     return render_template("delete.html",post_id=request.form.get('task'))
 
 
 @app.route("/add_new_task",methods=['POST'])
+@login_required
 def add_new_task():
     title = request.form.get("Task_Info")
     info = request.form.get("Task_Name")   
@@ -220,6 +224,7 @@ def add_new_task():
 
 
 @app.route("/action_target", methods=["POST"])
+@login_required
 def action_target():
     action = request.form.get("action")
     
@@ -247,9 +252,23 @@ def action_target():
         
         return redirect("/")
 
+
     # delete section
     elif action.lower() == "delete":
-        pass
+        
+        # if user click on yes to delete task
+        if request.form.get('delete') == "Yes":
+        # otherwise Click No
+            try:
+                new_task = Task.query.get(request.form.get('task'))
+                db.session.delete(new_task)
+                db.session.commit()
+                return redirect("/")
+            except:
+                return redirect("/")
+
+        else:
+            return redirect("/")
     
     else:
         return redirect("/")
@@ -258,6 +277,7 @@ def action_target():
 
 
 @app.route("/middle_center", methods=["POST"])
+@login_required
 def middle_center():
     if request.form.get("action") == "edit":
         return redirect("edit")
