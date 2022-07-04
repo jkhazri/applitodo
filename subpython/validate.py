@@ -44,6 +44,7 @@ def validate_passwords(password1,password2):
 
 
 def validate_tasks(task):
-    if not task:
+    if not task.strip():
         return False
+
     return True

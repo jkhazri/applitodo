@@ -296,7 +296,17 @@ def done():
         flash("Task Done. You can See Your all Done Tasks In history Section")
         return redirect("/")
 
+
 @app.route("/history")
 @login_required
 def history():
-    return render_template("history.html")
+    # query to db to get all Done Task
+    old_Task = Task.query.filter_by(status=1,user_id=session["user_id"])
+    return render_template("history.html",user_db=old_Task)
+
+
+
+@app.route("/temp")
+def temp():
+    # return render_template("base.html")   
+    return "hello"
