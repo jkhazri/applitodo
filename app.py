@@ -1,4 +1,6 @@
 from datetime import datetime
+import re
+from traceback import print_tb
 
 from flask import Flask,render_template ,redirect 
 from flask import flash,session ,request ,url_for
@@ -74,6 +76,12 @@ def index():
     if session.get("user_id"):
         # get user all task from data base
         user_db_data = Task.query.filter_by(user_id=(session['user_id'])).all()
+        for index,value in enumerate(user_db_data):
+            if value.status == 1:
+                print(user_db_data[index].status)
+                del user_db_data[index]
+                continue
+    
         return render_template("index.html",user_db=user_db_data,user_id=session['user_id'])
     else:
         return redirect("login")
@@ -192,6 +200,29 @@ def logout():
     session.clear()
     return redirect("/")
 
+@app.route("/add_new_task",methods=['POST'])
+@login_required
+def add_new_task():
+    title = request.form.get("Task_Info")
+    info = request.form.get("Task_Name")   
+
+    if not validate.validate_tasks(title):
+        return redirect('/')
+    if not validate.validate_tasks(info):
+        return redirect('/')
+    
+
+    # add task to user db
+    new_task = Task(user_id=session['user_id'],task_info=info.title(),task_title=title.title())
+    try:
+        db.session.add(new_task)
+        db.session.commit()
+        flash("Task Added SuccessFully")
+        return redirect('/')
+    except:
+        return error_500_server()
+
+
 @app.route("/edit",methods=["POST","GET"])
 @login_required
 def edit():
@@ -224,70 +255,50 @@ def edit():
             return error_500_server
         
 
-
 @app.route("/delete",methods=["POST","GET"])
 @login_required
 def delete():
-    return render_template("delete.html",post_id=request.form.get('task'))
-
-
-@app.route("/add_new_task",methods=['POST'])
-@login_required
-def add_new_task():
-    title = request.form.get("Task_Info")
-    info = request.form.get("Task_Name")   
-
-    if not validate.validate_tasks(title):
-        return redirect('/')
-    if not validate.validate_tasks(info):
-        return redirect('/')
-    
-
-    # add task to user db
-    new_task = Task(user_id=session['user_id'],task_info=info.title(),task_title=title.title())
-    try:
-        db.session.add(new_task)
-        db.session.commit()
-        flash("Task Added SuccessFully")
-        return redirect('/')
-    except:
-        return error_500_server()
-
-
-
-
-@app.route("/action_target", methods=["POST"])
-@login_required
-def action_target():
-    action = request.form.get("action")
-    # delete section
-    if action.lower() == "delete":
+    if request.method == "GET":
+        return render_template("delete.html",post_id=request.args.get('post_id'))
+    if request.method == "POST":
         if request.form.get('delete') == "Yes":
             try:
-                new_task = Task.query.get(request.form.get('task'))
+                new_task = Task.query.filter_by(id=request.form.get('post_id'),user_id=session["user_id"]).first()
+                if new_task == None:
+                    return redirect("/")
                 db.session.delete(new_task)
                 db.session.commit()
                 flash("Task Deleted successfully")
                 return redirect("/")
             except:
+                flash(message="Invalid Task",category="error")
                 return redirect("/")
         else:
             return redirect("/")
-    
-
     else:
         return redirect("/")
     
 
-
-
-@app.route("/middle_center", methods=["POST"])
+@app.route("/done" ,methods=["POST"])
 @login_required
-def middle_center():
-    if request.form.get("action") == "edit":
-        return redirect("edit")
+def done():
+    if request.method == "POST":
+        task_id=request.form.get("post_id")
 
-
+        # query to data base for change task status to done
+        new_task = Task.query.filter_by(id=task_id ,user_id=session["user_id"])
+        task_new = Task.query.filter_by(id=task_id ,user_id=session["user_id"])
+        
+        print(f"++{task_new}")
+        if new_task == None:
+            return redirect("/")
+        # status code 1 equal to done
+        new_task.status = 1
+        print(new_task.status)
+        print(new_task)
+        db.session.commit()
+        flash("Task Done ! Good Job")
+        return redirect("/")
 
 @app.route("/history")
 @login_required

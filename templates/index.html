@@ -127,8 +127,9 @@
         </thead>
         <tbody>
           <div class="body-table">
-            {% if user_db %} {% for each in user_db %} {% set line_counter =
-            loop.index %}
+  {% if user_db %} 
+      {% for each in user_db %}
+            {% set line_counter = loop.index %}
             <tr class="odd">
               <td>
                 <i class="fa-solid fa-circle-check"></i>
@@ -146,17 +147,16 @@
                   </button>
                 </form>
 
-                <form action="/delete" method="post">
-                  <input type="hidden" name="task" value="{{each.id}}" />
+                <form action="/delete" method="get">
+                  <input type="hidden" name="post_id" value="{{each.id}}" />
                   <button class="btn-opr" class="delete" type="submit">
                     <i class="fa-solid fa-trash"></i>
                     Delete
                   </button>
                 </form>
 
-                <form action="/middle_center" method="post">
-                  <input type="hidden" name="action" value="done" />
-                  <input type="hidden" name="task" value="{{each.id}}" />
+                <form action="/done" method="post">
+                  <input type="hidden" name="post_id" value="{{each.id}}" />
                   <button class="btn-opr" class="done" type="submit">
                     <i class="fa-solid fa-circle-check"></i>
                     Done
@@ -164,7 +164,8 @@
                 </form>
               </td>
             </tr>
-            {% endfor %} {% endif %}
+      {% endfor %}
+{% endif %}
           </div>
         </tbody>
       </table>

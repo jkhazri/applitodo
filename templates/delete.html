@@ -86,10 +86,9 @@
 
             <div class="container-fluid bg-costom p-5">
                 <div class="container-form mt-5">
-                    <form class="form_edit" action="/action_target" method="post">
-                      <input type="hidden" name="action" value="delete">  
+                    <form class="form_edit" action="/delete" method="post">
                         <h2 class="mx-auto" >Are Sure wanna Delete This Task?</h2>
-                        <input type="hidden" name="task" value="{{post_id}}">
+                        <input type="hidden" name="post_id" value="{{post_id}}">
                         <div class="d-flex justify-content-center align-items-center">
 
                           <input class="p-0 p-5" type="submit" name="delete"  value="Yes" />
