@@ -1,6 +1,4 @@
 from datetime import datetime
-import re
-from traceback import print_tb
 
 from flask import Flask,render_template ,redirect 
 from flask import flash,session ,request ,url_for
@@ -73,16 +71,16 @@ def page_not_found(e):
 @app.route("/")
 @login_required
 def index():
+    user_task = []
     if session.get("user_id"):
         # get user all task from data base
         user_db_data = Task.query.filter_by(user_id=(session['user_id'])).all()
         for index,value in enumerate(user_db_data):
-            if value.status == 1:
-                print(user_db_data[index].status)
-                del user_db_data[index]
-                continue
+            print(value.status)
+            if value.status != 1:
+                user_task.append(value)
     
-        return render_template("index.html",user_db=user_db_data,user_id=session['user_id'])
+        return render_template("index.html",user_db=user_task,user_id=session['user_id'])
     else:
         return redirect("login")
 
