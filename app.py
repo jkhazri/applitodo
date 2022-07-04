@@ -286,10 +286,8 @@ def done():
         task_id=request.form.get("post_id")
 
         # query to data base for change task status to done
-        new_task = Task.query.filter_by(id=task_id ,user_id=session["user_id"])
-        task_new = Task.query.filter_by(id=task_id ,user_id=session["user_id"])
+        new_task = Task.query.filter_by(id=task_id ,user_id=session["user_id"]).first()
         
-        print(f"++{task_new}")
         if new_task == None:
             return redirect("/")
         # status code 1 equal to done
@@ -297,7 +295,7 @@ def done():
         print(new_task.status)
         print(new_task)
         db.session.commit()
-        flash("Task Done ! Good Job")
+        flash("Task Done. You can See Your all Done Tasks In history Section")
         return redirect("/")
 
 @app.route("/history")
