@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import InputRequired, Length
 
 # user name 6- 64
-# password - 10 - 64256
+# password - 6 - 64
 
 
 # Login Form
