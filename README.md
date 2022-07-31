@@ -24,3 +24,6 @@ A todo web app || 80% Done
 <img src="https://github.com/alisharifyy/Todo-Web-app/blob/main/static/img/add_task.png" width="100%">
 <img src="https://github.com/alisharifyy/Todo-Web-app/blob/main/static/img/task_added.png" width="100%"> 
 
+
+# 4. History Page 
+<img src="https://github.com/alisharifyy/Todo-Web-app/blob/main/static/img/history.png" width="100%"> 
