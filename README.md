@@ -2,9 +2,11 @@
 A Fully Responsive Todo-Web-App With Flask-python 
 
 > First
+
       git clone https://github.com/alisharifyy/Todo-Web-app
 
 > Then 
+
      pip install -r requirements.txt
       
 ## This Web Application User Flask Session For Remember Users and Use flask-wtf For Html Forms and CSRF Attacks and ...
