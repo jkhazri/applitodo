@@ -15,4 +15,12 @@ A todo web app || 80% Done
 ---
 
 # 2.Index Page 
-<img src="https://github.com/alisharifyy/Todo-Web-app/blob/main/static/img/index.png" width="100%"> 
+<img src="https://github.com/alisharifyy/Todo-Web-app/blob/main/static/img/first_home.png" width="100%"> 
+
+
+---
+
+# 3. Add Task 
+<img src="https://github.com/alisharifyy/Todo-Web-app/blob/main/static/img/add_task.png" width="100%">
+<img src="https://github.com/alisharifyy/Todo-Web-app/blob/main/static/img/task_added.png" width="100%"> 
+
