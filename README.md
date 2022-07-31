@@ -1,11 +1,14 @@
 # Todo-Web-app
-A todo web app || 80% Done
+A Fully Responsive Todo-Web-App With Flask-python 
 
+> First
       git clone https://github.com/alisharifyy/Todo-Web-app
-     
+
+> Then 
+     pip install -r requirements.txt
       
 ## This Web Application User Flask Session For Remember Users and Use flask-wtf For Html Forms and CSRF Attacks and ...
-
+### For Style Page Using Bootstrap For Menu But Other Style Cooded manually 
       
 # 1.Login And Register Index Page
 <img src="https://github.com/alisharifyy/Todo-Web-app/blob/main/static/img/register.png" width="100%">   
