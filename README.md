@@ -1,5 +1,4 @@
-# Todo-Web-app
-A Fully Responsive Todo-Web-App With Flask-python 
+# A Fully Responsive Todo-Web-App With Flask-python 
 
 > First
 
