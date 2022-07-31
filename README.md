@@ -5,7 +5,7 @@ A Fully Responsive Todo-Web-App With Flask-python
 
       git clone https://github.com/alisharifyy/Todo-Web-app
 
-> Then 
+> Then Type This For Install all Packages
 
      pip install -r requirements.txt
       
