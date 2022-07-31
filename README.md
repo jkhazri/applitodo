@@ -2,10 +2,9 @@
 A todo web app || 80% Done
 
       git clone https://github.com/alisharifyy/Todo-Web-app
+     
       
-      
-## This Web Application User Flask Session For Remember Users
-## and Use flask-wtf For Html Forms and CSRF Attacks and ...
+## This Web Application User Flask Session For Remember Users and Use flask-wtf For Html Forms and CSRF Attacks and ...
 
       
 # 1.Login And Register Index Page
