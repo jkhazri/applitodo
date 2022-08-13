@@ -8,6 +8,9 @@
 
      pip install -r requirements.txt
       
+> and finally just Type
+      flask run
+      
 ## This Web Application User Flask Session For Remember Users and Use flask-wtf For Html Forms and CSRF Attacks and ...
 ### For Style Page Using Bootstrap For Menu But Other Style Cooded manually 
       
