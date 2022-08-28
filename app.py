@@ -1,9 +1,10 @@
+import os
+import sys
 from datetime import datetime
 
 from flask import Flask,render_template ,redirect 
 from flask import flash,session ,request ,url_for
 from flask_session import Session
-
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError 
 from flask_sqlalchemy import SQLAlchemy
@@ -56,6 +57,11 @@ class Task(db.Model):
 #     task_info = db.Column(db.String(256) ,nullable=False,unique=False)
 #     # 0 = on Doing || 1 = Done! || 3 = Delete
 #     status = db.Column(db.Integer ,default=0)
+
+if "app.db" not in os.listdir():
+    db.create_all()
+    print(" * DB Created :)")
+
 
 
 # Error Handler for 404 or 500
