@@ -316,3 +316,11 @@ def history():
 def temp():
     # return render_template("base.html")   
     return "hello"
+  
+  
+ 
+ 
+ if __name__ == "__main__":
+  app.run()
+  
+  
